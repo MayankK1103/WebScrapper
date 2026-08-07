@@ -12,10 +12,7 @@ class Scraper:
         self.page = requests.get(self.url)
         return self.page
     def soup(self):
-        if self.page:
-            self.parse = BeautifulSoup(self.page.content, "html.parser")
-        else:
-            self.parse = BeautifulSoup(self.get().content, "html.parser")
+        self.parse = BeautifulSoup(self.page.content, "html.parser")    
         return self.parse
 
 @dataclass
@@ -34,19 +31,12 @@ class BookScraper(Scraper):
         self.books = None
         
     def booksHTML(self):
-        # does this also need the if conditional check to see if self.parse already exists
-        if self.parse:
-            self.books = self.parse.find_all("article" , class_ = "product_pod")
-        else:
-            self.books = self.soup().find_all("article" , class_ = "product_pod")
-        
+        self.books = self.parse.find_all("article" , class_ = "product_pod")
         return self.books
 
     def book_list(self):
         self.book_collection = []
-
-        if self.books == None:
-            self.booksHTML()
+        self.preprocess()
 
         for book in self.books:
             title = book.h3.a["title"]
@@ -54,58 +44,18 @@ class BookScraper(Scraper):
             price = book.find("p", class_ = "price_color").text
 
             bookObj = Book(title, rating, price)
-            self.book_collection.append((bookObj.title, bookObj.rating, bookObj.price))
+            self.book_collection.append(bookObj)
 
         return self.book_collection
     
     # Design a run method that does all those manual checks to see if all the 
     # variables are defined and if not call the appropriate methods to do so.
-    def run(self):
-        pass
-
+    def preprocess(self):
+        # design a way to ensure that all the methods are called in the right order
+        self.get()
+        self.soup()
+        self.booksHTML()
+        return
 
 bs = BookScraper("https://books.toscrape.com/")
 print(bs.book_list())
-
-
-        
-        
-
-        
-        
-        
-
-
-
-
-# s = Scraper("https://books.toscrape.com/")
-# print(s.soup())
-
-books_page = requests.get("https://books.toscrape.com/")
-#print(type(books_page))
-soup = BeautifulSoup(books_page.content, "html.parser")
-
-books = soup.find_all("article" , class_ = "product_pod")
-#print(books)
-
-
-rating = books[0].find("p", class_ = "star-rating")["class"][-1]
-title = books[0].h3.a["title"]
-price = books[0].find("p", class_ = "price_color").text
-
-#print(rating, title, price)
-
-book_list = []
-
-for book in books:
-    rating = book.find("p", class_ = "star-rating")["class"][-1]
-    title = book.h3.a["title"]
-    price = book.find("p", class_ = "price_color").text
-
-    book_list.append({"title" : title, "rating" : rating, "price" : price })
-
-#print(book_list)
-
-
-
-
