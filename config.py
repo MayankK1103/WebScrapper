@@ -15,5 +15,3 @@ database = os.getenv("DB_NAME", "")
 DATABASE_URL = (f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}")
 
 engine = create_engine(DATABASE_URL)
-with engine.connect() as conn:
-    conn.execute(text("SELECT 1"))

@@ -1,6 +1,22 @@
 from dataclasses import dataclass
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import String, Numeric
+from decimal import Decimal
+
+
 @dataclass
 class Book:
     title: str # setting equal to None means its optional to include when constructing
     rating: str
     price: str
+
+class Base(DeclarativeBase):
+    pass
+
+class BookModel(Base):
+    __tablename__ = "books"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String())
+    rating: Mapped[str] = mapped_column(String())
+    price: Mapped[Decimal] = mapped_column(Numeric(10,2))

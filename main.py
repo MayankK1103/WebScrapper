@@ -1,5 +1,7 @@
-from scraper import *
-from config import *
+from sqlalchemy import text
+from scraper import BookScraper
+from config import engine
 
-bs = BookScraper("https://books.toscrape.com/")
-print(bs.book_list())
+if __name__ == "__main__":
+    bs = BookScraper("https://books.toscrape.com/")
+    print(bs.book_list())

@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from book import Book
+from decimal import Decimal
 
 
 
@@ -37,7 +38,7 @@ class BookScraper(Scraper):
         for book in self.books:
             title = book.h3.a["title"]
             rating = book.find("p", class_ = "star-rating")["class"][-1]
-            price = book.find("p", class_ = "price_color").text
+            price = Decimal(book.find("p", class_ = "price_color").text[1:])
 
             bookObj = Book(title, rating, price)
             self.book_collection.append(bookObj)
