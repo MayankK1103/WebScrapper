@@ -5,7 +5,8 @@ from config import engine
 from book import Base, to_model, BookModel
 
 if __name__ == "__main__":
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine) don't need after initial setup as this establishes
+    # the one time connection
     bs = BookScraper("https://books.toscrape.com/")
 
     with Session(engine) as session:
@@ -20,6 +21,5 @@ if __name__ == "__main__":
     with Session(engine) as session:
         session.add_all(model_instances)
         session.commit()
-        print()
 
     
