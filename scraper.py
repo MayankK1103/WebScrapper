@@ -33,6 +33,13 @@ class Scraper:
         self.parse = BeautifulSoup(self.page.content, "html.parser")    
         return self.parse
 
+    def preprocess(self):
+        # design a way to ensure that all the methods are called in the right order
+        self.get()
+        self.soup()
+
+        return
+
 
 class BookScraper(Scraper):
 
@@ -62,8 +69,13 @@ class BookScraper(Scraper):
     
     def preprocess(self):
         # design a way to ensure that all the methods are called in the right order
-        self.get()
-        self.soup()
+        super().preprocess()
         self.booksHTML()
         return
 
+class CountryScraper(Scraper):
+
+    def __init__(self, url):
+        super().__init__(url)
+
+    
