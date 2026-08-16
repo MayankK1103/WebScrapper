@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from requests.exceptions import ConnectionError
 from book import Book
+from countries import Country
 
 def retry(base_fn):
     def wrapper_fn(*args, **kwargs):
@@ -77,5 +78,29 @@ class CountryScraper(Scraper):
 
     def __init__(self, url):
         super().__init__(url)
+        self.parse = None
+        self.countries = None
 
-    
+    def countriesHTML(self):
+        self.countries = self.parse.find_all("div", class_ = "col-md-4 country")
+
+    def countries_list(self):
+        self.countries_collection = []
+        self.preprocess()
+
+        for country in self.countries:
+            name = country.h3.text
+            capital = country.find("span", class_ = "country-capital").text
+            population = country.find("span", class_ = "country-population").text
+            area = country.find("span", class_ = "country-area").text
+
+            countryObj = Country(name, capital, population, area)
+            self.countries_collection.append(countryObj)
+
+        return self.countries_collection
+
+    def preprocess(self):
+        # design a way to ensure that all the methods are called in the right order
+        super().preprocess()
+        self.countriesHTML()
+        return

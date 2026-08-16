@@ -2,6 +2,11 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 from sqlalchemy import create_engine, text
+from sqlalchemy.orm import DeclarativeBase
+
+
+class Base(DeclarativeBase):
+    pass
 
 load_dotenv()
 
