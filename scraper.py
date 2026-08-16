@@ -89,10 +89,10 @@ class CountryScraper(Scraper):
         self.preprocess()
 
         for country in self.countries:
-            name = country.h3.text
-            capital = country.find("span", class_ = "country-capital").text
-            population = country.find("span", class_ = "country-population").text
-            area = country.find("span", class_ = "country-area").text
+            name = country.h3.text.strip()
+            capital = country.find("span", class_ = "country-capital").text.strip()
+            population = country.find("span", class_ = "country-population").text.strip()
+            area = country.find("span", class_ = "country-area").text.strip()
 
             countryObj = Country(name, capital, population, area)
             self.countries_collection.append(countryObj)

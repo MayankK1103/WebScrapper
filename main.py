@@ -19,6 +19,7 @@ if __name__ == "__main__":
         existing_books = session.scalars(book_statement).all()
         existing_countries = session.scalars(country_statement).all()
 
+
     book_model_instances = []
     for item in bs.book_list():
         if item.title not in existing_books:
