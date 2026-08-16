@@ -1,7 +1,21 @@
 from bs4 import BeautifulSoup
 import requests
+from requests.exceptions import ConnectionError
 from book import Book
 
+def retry(base_fn):
+    def wrapper_fn(*args, **kwargs):
+        error = None
+        for i in range(3):
+            try:
+                html = base_fn(*args, **kwargs)
+                return html
+            except ConnectionError as e:
+                error = e
+                print("Retrying")
+        if (error):
+            raise ConnectionError("Couldn't connect to url server") from error
+    return wrapper_fn
 
 
 class Scraper:
@@ -10,9 +24,11 @@ class Scraper:
         self.url = url
         self.page: requests.models.Response = None
 
+    @retry
     def get(self):
         self.page = requests.get(self.url)
         return self.page
+
     def soup(self):
         self.parse = BeautifulSoup(self.page.content, "html.parser")    
         return self.parse
