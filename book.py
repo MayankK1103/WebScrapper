@@ -12,7 +12,6 @@ class Book:
     price: str
 
 
-
 class BookModel(Base):
     __tablename__ = "books"
 

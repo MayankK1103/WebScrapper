@@ -38,7 +38,6 @@ class Scraper:
         # design a way to ensure that all the methods are called in the right order
         self.get()
         self.soup()
-
         return
 
 
