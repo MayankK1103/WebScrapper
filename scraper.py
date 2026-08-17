@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 from requests.exceptions import ConnectionError
-from book import Book
-from countries import Country
+from models.book import Book
+from models.countries import Country
 
 def retry(base_fn):
     def wrapper_fn(*args, **kwargs):

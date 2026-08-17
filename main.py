@@ -2,18 +2,14 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from scraper import BookScraper, CountryScraper
 from config import engine, Base
-from book import BookModel, to_book_model
-from countries import CountryModel, to_country_model
+from models.book import BookModel, to_book_model
+from models.countries import CountryModel, to_country_model
 
-# what goes into the pipeline class?
-# creating the session engine, the statements, the already exisitng elements
-# then the precheck, and then session 
 
-# how to connect the instances of the scrapers to the pipeline class itself
 class Pipeline:
 
-    def __init__(self, scraper, scraper_method, to_model_method, db_model, unique): # scraper would be the scraper instance of a type of scraper
-        # scraper 
+    def __init__(self, scraper, scraper_method, to_model_method, db_model, unique): 
+        # scraper would be the scraper instance of a type of scraper (e.g. book, country, etc)
         self.scraper = scraper
         self.scraper_method = scraper_method
         self.to_model_method = to_model_method
@@ -50,8 +46,6 @@ class Pipeline:
         return
 
         
-
-
 if __name__ == "__main__":
     Base.metadata.create_all(engine) # don't need after initial setup as this establishes
     # the one time connection
