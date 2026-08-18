@@ -29,6 +29,7 @@ class Pipeline:
         self.instances = []
         method_to_call = getattr(self.scraper, self.scraper_method)
 
+        # also need to convert to generator function so that memory doesn't get overloaded
         for item in method_to_call():
             scraped_data = getattr(item, self.unique)
             if scraped_data not in self.existing:

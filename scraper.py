@@ -25,17 +25,19 @@ class Scraper:
         self.url = url
         self.page: requests.models.Response = None
 
+    # unstructed HTML from page
     @retry
     def get(self):
         self.page = requests.get(self.url)
         return self.page
 
+    # parse HTML into structured format with BeauitfulSoup
     def soup(self):
         self.parse = BeautifulSoup(self.page.content, "html.parser")    
         return self.parse
 
+    # design a way to ensure that all the methods are called in the right order
     def preprocess(self):
-        # design a way to ensure that all the methods are called in the right order
         self.get()
         self.soup()
         return
@@ -48,15 +50,19 @@ class BookScraper(Scraper):
         super().__init__(url)
         self.parse = None
         self.books = None
-        
+
+    # Find all the book elements within the page HTML
     def booksHTML(self):
         self.books = self.parse.find_all("article" , class_ = "product_pod")
         return self.books
 
+    # Extract attributes for each book and create obj with attributes
     def book_list(self):
         self.book_collection = []
         self.preprocess()
 
+        # Need to convert to generator function instead of appending all 
+        # due to memory restirctions
         for book in self.books:
             title = book.h3.a["title"]
             rating = book.find("p", class_ = "star-rating")["class"][-1]
